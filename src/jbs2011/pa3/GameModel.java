@@ -2,9 +2,14 @@ package jbs2011.pa3;
 
 import java.util.ArrayList;
 
+
 /**
  * This provides a model for how the game works
- * with hooks for user interaction.
+ * with hooks for user interaction. 
+ * The user flings one (or more) disks trying to hit all targets (which disappear when hit)
+ * If she hits all targets without hitting any obstacles she wins. Hitting an obstacle ends
+ * the game.
+ * 
  * @author tim
  *
  */
@@ -21,7 +26,7 @@ public class GameModel  {
 	/**
 	 * this is set to true when the level is completed
 	 */
-	public boolean levelOver=false;
+	public boolean levelOver=true;
 	
 	/**
 	 * this is set to true when the user wins 
@@ -207,6 +212,9 @@ public class GameModel  {
 		
 		// if there are non-static disks, then we update their positions
 		lastTime = currTime;
+		ArrayList<Square> hitTarget= new ArrayList<Square>();
+		ArrayList<Disk> hitDisk = new ArrayList<Disk>();
+		
 		for (Disk d:activeDisks){
 				// let gravity move the object over the time interval dt
 				d.update(dt);
@@ -222,14 +230,25 @@ public class GameModel  {
 						d.isStatic = true;	
 				
 				// check to see if the disk has hit any targets, and if so the level is over..
+
 				for (Square s:targets)
 					if (d.intersects(s)){
-						levelOver=true;
-						userWon=true;
+						hitTarget.add(s);
+						hitDisk.add(d); 
 					}
-
 					
 		}
+		for (Disk d:hitDisk){
+			//disks.remove(d);
+		}
+		for (Square s:hitTarget)
+			targets.remove(s);
+		
+		if (targets.size()==0) {
+			levelOver=true;
+			userWon=true;
+		}
+
 	}
 	
 	
@@ -251,9 +270,12 @@ public class GameModel  {
 		return s.toString();
 	}
 	
-	
-	
+
 	public void createLevel(int level){
+		createLevel(level,500,500);
+	}
+	
+	public void createLevel(int level, int width, int height){
 		switch (level){
 		case 1: // this is a simple level with 3 disks a square and a target, useful for debugging...
 			addSquare(150f, 50f, 50f);
@@ -267,13 +289,17 @@ public class GameModel  {
 			break;
 			
 		
-		case 2: // this is a fun level with up to 30 visible blocks, 1 target and 5 disks..
+		case 2: // this is a fun level with up to 30 visible blocks, 10 targets and 1 disks..
 			for (int i=0;i<30; i++){
-				this.addSquare((float)Math.random()*1000,(float)Math.random()*900+100,(float)Math.random()*30+10);
+				this.addSquare((float)Math.random()*width,(float)Math.random()*(height-100)+100,(float)Math.random()*30+10);
 			}
-			this.addTarget((float)Math.random()*200+300,(float)Math.random()*200+300,50);
-			for (int i=0;i<5;i++)
+			
+			for (int i=0; i<10; i++)
+				this.addTarget((float)Math.random()*(width-200)+100,(float)Math.random()*(height-100)+100,50);
+
+			for (int i=0;i<1;i++)
 				this.addDisk(50f*i,50f,25f);
+
 			break;
 	  }
 	}
