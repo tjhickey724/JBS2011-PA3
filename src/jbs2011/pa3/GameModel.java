@@ -111,15 +111,29 @@ public class GameModel  {
 	}
 
 	/**
-	 * returns a disk touching (x,y) if one exists and return null else
+	 * returns the disk whose center is closest to (x,y) and within 100 pixels if one exists and returns null else
 	 * @param x
 	 * @param y
 	 * @return
 	 */
 	public Disk touchingDisk(float x, float y){
-		for (Disk d:disks)
-			if (d.inside(x,y)) return d;
-		return null;
+		// find the closest disk to (x,y)
+		if (disks.size()==0) return null;
+		
+		Disk closestDisk = disks.get(0);
+		float closestDistance = closestDisk.dist(x, y);
+		for (Disk d:disks){
+			float d1 = d.dist(x, y);
+			if (d1 < closestDistance){
+				closestDistance = d1;
+				closestDisk = d;
+			}
+		}
+		if (closestDistance < 100)
+			return closestDisk;
+		else
+			return null;
+		
 	}
 	
 	/**
@@ -237,6 +251,32 @@ public class GameModel  {
 		return s.toString();
 	}
 	
+	
+	
+	public void createLevel(int level){
+		switch (level){
+		case 1: // this is a simple level with 3 disks a square and a target, useful for debugging...
+			addSquare(150f, 50f, 50f);
+			addTarget(180f, 150f, 50f);
+			Disk d = addDisk(150f, 500f, 50f);
+			addDisk(300f, 500f, 30f);
+			addDisk(350f, 500f, 20f);
+			addDisk(400f, 500f, 10f);
+			d.vx = 10;
+			d.vy = 102;
+			break;
+			
+		
+		case 2: // this is a fun level with up to 30 visible blocks, 1 target and 5 disks..
+			for (int i=0;i<30; i++){
+				this.addSquare((float)Math.random()*1000,(float)Math.random()*900+100,(float)Math.random()*30+10);
+			}
+			this.addTarget((float)Math.random()*200+300,(float)Math.random()*200+300,50);
+			for (int i=0;i<5;i++)
+				this.addDisk(50f*i,50f,25f);
+			break;
+	  }
+	}
 	/**
 	 * do a little testing of the model...
 	 * @param args

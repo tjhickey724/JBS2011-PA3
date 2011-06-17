@@ -55,10 +55,30 @@ public class Disk {
 	 * @return
 	 */
 	public boolean inside(float x, float y){
-		float dist = (x-this.x)*(x-this.x) + (y-this.y)*(y-this.y);
-		boolean z = (dist < this.r*this.r);  
-		System.out.println("inside: x="+x+" y="+y+" dist="+dist+" z="+z+" d="+this);
+		float dist2 = (x-this.x)*(x-this.x) + (y-this.y)*(y-this.y);
+		boolean z = (dist2 < this.r*this.r);  
 		return z;
+	}
+	
+	/**
+	 * returns the distance between the point x,y and the center of the disk
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public float dist(float x, float y) {
+		float dist = (float) Math.sqrt((x-this.x)*(x-this.x) + (y-this.y)*(y-this.y));
+		return dist;
+	}
+	/**
+	 * returns true if the point (x,y) is within d pixels of the disk
+	 * @param x
+	 * @param y
+	 * @param d
+	 * @return
+	 */
+	public boolean near(float x, float y,float d){
+		return this.dist(x,y)<d;
 	}
 	
 	/**
