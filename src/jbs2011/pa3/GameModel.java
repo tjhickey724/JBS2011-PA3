@@ -18,7 +18,25 @@ public class GameModel  {
 	private long dt;
 	private boolean firstEval=true;
 	
+	/**
+	 * this is set to true when the level is completed
+	 */
 	public boolean levelOver=false;
+	
+	/**
+	 * this is set to true when the user wins 
+	 */
+	public boolean userWon = false;
+	
+	/**
+	 * this is set to true when the user loses
+	 */
+	public boolean userLost = false;
+	
+	/**
+	 * this is the game gravity for all non-weightless, non-static objects
+	 */
+	public float gravity = -100; 
 	
 	/**
 	 * create an empty GameModel
@@ -130,20 +148,24 @@ public class GameModel  {
 	
 	
 	/**
-	 * reseting model remove all squares and disks from playing surface
+	 * reseting model remove all squares and disks from playing surface, and reset the game status
 	 */
 	
 	public void resetGame(){
 		disks.clear();
 		squares.clear();
 		targets.clear();
+		levelOver=false;
+		userWon=false;
+		userLost=false;
 	}
 	
 	/**
 	 * this iterates through all disks and changes their position
 	 * based on their current velocity (updated via gravity). If
 	 * a disk intersects a static object (disk or square), it becomes
-	 * static itself.
+	 * static itself. If a disk hits the target the game is over (user won)
+	 * and if the disks are all static the game is over (user lost).
 	 *
 	 */
 	public void updateGame(long now) {
@@ -154,23 +176,45 @@ public class GameModel  {
 		} else {
 			dt = currTime - lastTime;
 		}
-	//	System.out.println("now="+now+" and dt = "+dt);
-		lastTime = currTime;
+		
+		// the non-static disks will have their positions updated
+		// so we first find the arraylist of non-static disks
+		ArrayList<Disk> activeDisks = new ArrayList<Disk>();
 		for (Disk d:disks){
-			if (! d.isStatic){
+			if (!d.isStatic)
+				activeDisks.add(d);
+		}
+		
+		// if all of the disks are static (i.e. frozen), the level is over and the user lost.
+		if (activeDisks.size()==0){
+			levelOver=true; userLost=true;
+			return;
+		}
+		
+		// if there are non-static disks, then we update their positions
+		lastTime = currTime;
+		for (Disk d:activeDisks){
+				// let gravity move the object over the time interval dt
 				d.update(dt);
+				
+				// check to see if the disk has hit any squares, if so it become static
 				for (Square s:squares) 
 					if (d.intersects(s)) 
 						d.isStatic=true;
-					
+				
+				// check to see if the disk has hit any static disks, and make it static if it has
 				for (Disk d1:disks) 
 					if (d.intersects(d1) && d1.isStatic)
 						d.isStatic = true;	
 				
+				// check to see if the disk has hit any targets, and if so the level is over..
 				for (Square s:targets)
-					if (d.intersects(s))
+					if (d.intersects(s)){
 						levelOver=true;
-			}
+						userWon=true;
+					}
+
+					
 		}
 	}
 	

@@ -23,7 +23,9 @@ public class Disk {
 	/**
 	 * the gravitational constant for the game
 	 */
-	double gravity = -100;
+	float gravity = -100;
+	
+	public boolean weightless = false;
 	
 	/**
 	 * true if the disk is static, i.e. not subject to gravity
@@ -70,13 +72,13 @@ public class Disk {
 
 	/**
 	 * updates the position of disk d after t milliseconds using its position and
-	 * velocity and assuming gravity is working on the disk and it has mass of 1
-	 * kg
+	 * velocity. If the weightless flag is true then gravity is zero for this disk.
 	 * 
 	 * @param t
 	 */
 	public void update(long dt) {
-		vy += (dt / 1000.0) * gravity;
+		float localGravity = weightless?0:gravity;
+		vy += (dt / 1000.0) * localGravity;
 		x += vx * (dt / 1000.0);
 		y += vy * (dt / 1000.0);
 
