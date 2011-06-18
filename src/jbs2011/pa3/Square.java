@@ -31,7 +31,7 @@ public class Square {
 	 * return true if (x,y) is within the square
 	 * @param x
 	 * @param y
-	 * @return
+	 * @return true if point within square
 	 */
 	public boolean inside(float x, float y){
 		return (Math.abs(x-this.x)<this.w/2) && (Math.abs(y-this.y)<this.w/2);

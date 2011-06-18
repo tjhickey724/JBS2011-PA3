@@ -53,7 +53,7 @@ public class GameModel  {
 	/**
 	 * add a disk to the model
 	 * @param d
-	 * @return
+	 * @return d
 	 */
 	public Disk addDisk(Disk d){
 		disks.add(d);
@@ -65,7 +65,7 @@ public class GameModel  {
 	 * @param x
 	 * @param y
 	 * @param r
-	 * @return
+	 * @return a disk
 	 */
 	public Disk addDisk(float x, float y, float r){
 		Disk d = new Disk(x,y,r);
@@ -75,7 +75,7 @@ public class GameModel  {
 	/**
 	 * add a square to the model
 	 * @param s
-	 * @return
+	 * @return a square
 	 */
 	public Square addSquare(Square s){
 		squares.add(s);
@@ -87,7 +87,7 @@ public class GameModel  {
 	 * @param x
 	 * @param y
 	 * @param w
-	 * @return
+	 * @return a square
 	 */
 	public Square addSquare(float x, float y, float w){
 		Square s = new Square(x,y,w,false);
@@ -97,7 +97,7 @@ public class GameModel  {
 	/** 
 	 * add a target to the model
 	 * @param t
-	 * @return
+	 * @return t
 	 */
 	public Square addTarget(Square t){
 		targets.add(t);
@@ -109,7 +109,7 @@ public class GameModel  {
 	 * @param x
 	 * @param y
 	 * @param w
-	 * @return
+	 * @return a target
 	 */
 	public Square addTarget(float x, float y, float w) {
 		return addTarget(new Square(x,y,w,true));
@@ -119,7 +119,7 @@ public class GameModel  {
 	 * returns the disk whose center is closest to (x,y) and within 100 pixels if one exists and returns null else
 	 * @param x
 	 * @param y
-	 * @return
+	 * @return a disk
 	 */
 	public Disk touchingDisk(float x, float y){
 		// find the closest disk to (x,y)
@@ -145,7 +145,7 @@ public class GameModel  {
 	 * return a non-target square touching (x,y) if one exists ar return null
 	 * @param x
 	 * @param y
-	 * @return
+	 * @return a square
 	 */
 	public Square touchingSquare(float x, float y){
 		for (Square s:squares)
@@ -157,7 +157,7 @@ public class GameModel  {
 	 * return a target square touching (x,y) or null if none exists
 	 * @param x
 	 * @param y
-	 * @return
+	 * @return a target
 	 */
 	public Square touchingTarget(float x, float y){
 		for (Square s:targets)

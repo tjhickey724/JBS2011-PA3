@@ -52,7 +52,7 @@ public class Disk {
 	 * returns true if the point (x,y) is within the disk
 	 * @param x
 	 * @param y
-	 * @return
+	 * @return true if point inside disk
 	 */
 	public boolean inside(float x, float y){
 		float dist2 = (x-this.x)*(x-this.x) + (y-this.y)*(y-this.y);
@@ -64,7 +64,7 @@ public class Disk {
 	 * returns the distance between the point x,y and the center of the disk
 	 * @param x
 	 * @param y
-	 * @return
+	 * @return dist
 	 */
 	public float dist(float x, float y) {
 		float dist = (float) Math.sqrt((x-this.x)*(x-this.x) + (y-this.y)*(y-this.y));
@@ -75,7 +75,7 @@ public class Disk {
 	 * @param x
 	 * @param y
 	 * @param d
-	 * @return
+	 * @return true if point is near disk
 	 */
 	public boolean near(float x, float y,float d){
 		return this.dist(x,y)<d;
@@ -94,7 +94,7 @@ public class Disk {
 	 * updates the position of disk d after t milliseconds using its position and
 	 * velocity. If the weightless flag is true then gravity is zero for this disk.
 	 * 
-	 * @param t
+	 * @param dt
 	 */
 	public void update(long dt) {
 		float localGravity = weightless?0:gravity;
@@ -113,7 +113,7 @@ public class Disk {
 	/**
 	 * returns true if the disk intersects the square
 	 * @param s
-	 * @return
+	 * @return true if the disk intersects the square
 	 */
 	public boolean intersects(Square s) {
 		return ((Math.abs(this.x - s.x) < this.r + (s.w) / 2) 
@@ -123,7 +123,7 @@ public class Disk {
 	/**
 	 * returns true if the current disk intersect the disk d
 	 * @param d
-	 * @return
+	 * @return true if the current disk intersect the disk d
 	 */
 	public boolean intersects(Disk d) {
 		return ((Math.pow(this.x - d.x, 2.0) + Math.pow(this.y - d.y, 2)) < Math
