@@ -297,7 +297,7 @@ public class GameModel  {
 			for (int i=0; i<10; i++)
 				this.addTarget((float)Math.random()*(width-200)+100,(float)Math.random()*(height-100)+100,50);
 
-			for (int i=0;i<1;i++)
+			for (int i=0;i<2;i++)
 				this.addDisk(50f*i,50f,25f);
 
 			break;
