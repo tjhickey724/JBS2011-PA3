@@ -290,8 +290,8 @@ public class GameModel  {
 			
 		
 		case 2: // this is a fun level with up to 30 visible blocks, 10 targets and 1 disks..
-			for (int i=0;i<30; i++){
-				this.addSquare((float)Math.random()*width,(float)Math.random()*(height-100)+100,(float)Math.random()*30+10);
+			for (int i=0;i<10; i++){
+				this.addSquare((float)Math.random()*width,(float)Math.random()*(height-100)+100,(float)Math.random()*30+40);
 			}
 			
 			for (int i=0; i<10; i++)
