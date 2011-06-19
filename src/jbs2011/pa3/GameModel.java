@@ -20,6 +20,9 @@ public class GameModel  {
 	public ArrayList<Square> targets=new ArrayList<Square>();
 	private long lastTime;
 	private long currTime;
+	private long startTime=0;
+	public float gameLength=15; // seconds
+	public float timeRemaining;
 	private long dt;
 	private boolean firstEval=true;
 	
@@ -196,6 +199,14 @@ public class GameModel  {
 			dt = currTime - lastTime;
 		}
 		
+		// see if the user has run out of time
+		timeRemaining = gameLength - (now-startTime)/1000f;
+		if (timeRemaining<0){
+			levelOver=true; userLost=true;
+			return;
+		}
+			
+		
 		// the non-static disks will have their positions updated
 		// so we first find the arraylist of non-static disks
 		ArrayList<Disk> activeDisks = new ArrayList<Disk>();
@@ -276,6 +287,8 @@ public class GameModel  {
 	}
 	
 	public void createLevel(int level, int width, int height){
+		startTime = System.currentTimeMillis();
+		timeRemaining = gameLength;
 		switch (level){
 		case 1: // this is a simple level with 3 disks a square and a target, useful for debugging...
 			addSquare(150f, 50f, 50f);
