@@ -21,8 +21,24 @@ public class GameModel  {
 	private long lastTime;
 	private long currTime;
 	private long startTime=0;
+	/**
+	 * length of a game in seconds
+	 */
 	public float gameLength=15; // seconds
+	/**
+	 * time remaining in the current game
+	 */
 	public float timeRemaining;
+	/**
+	 * number of games won so far
+	 */
+	public int wins;
+	/**
+	 * number of games lost so far
+	 */
+	public int losses;
+	
+	
 	private long dt;
 	private boolean firstEval=true;
 	
@@ -203,6 +219,7 @@ public class GameModel  {
 		timeRemaining = gameLength - (now-startTime)/1000f;
 		if (timeRemaining<0){
 			levelOver=true; userLost=true;
+			losses += 1;
 			return;
 		}
 			
@@ -218,6 +235,7 @@ public class GameModel  {
 		// if all of the disks are static (i.e. frozen), the level is over and the user lost.
 		if (activeDisks.size()==0){
 			levelOver=true; userLost=true;
+			losses += 1;
 			return;
 		}
 		
@@ -258,6 +276,7 @@ public class GameModel  {
 		if (targets.size()==0) {
 			levelOver=true;
 			userWon=true;
+			wins += 1;
 		}
 
 	}
