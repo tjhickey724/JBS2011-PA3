@@ -14,13 +14,26 @@ import java.util.ArrayList;
  *
  */
 public class GameModel  {
-	
+	/**
+	 * list of all active disks in the game
+	 */
 	public ArrayList<Disk> disks = new ArrayList<Disk>();
+	/**
+	 * list of all static squares
+	 */
 	public ArrayList<Square> squares=new ArrayList<Square>();
+	/**
+	 * list of all target squares
+	 */
 	public ArrayList<Square> targets=new ArrayList<Square>();
+	
+	// last time the doDraw method was called
 	private long lastTime;
+	// current time that the doDraw method is called
 	private long currTime;
+	// beginning time for the current game 
 	private long startTime=0;
+	
 	/**
 	 * length of a game in seconds
 	 */
@@ -38,8 +51,10 @@ public class GameModel  {
 	 */
 	public int losses;
 	
-	
+	// time since the last call to doDraw
 	private long dt;
+	
+	// true if this is the first time doDraw has been called since the application was started
 	private boolean firstEval=true;
 	
 	/**
@@ -186,7 +201,7 @@ public class GameModel  {
 	
 	
 	/**
-	 * reseting model remove all squares and disks from playing surface, and reset the game status
+	 * reseting model remove all squares and disks from playing surface, and resets the game status
 	 */
 	
 	public void resetGame(){
@@ -204,9 +219,12 @@ public class GameModel  {
 	 * a disk intersects a static object (disk or square), it becomes
 	 * static itself. If a disk hits the target the game is over (user won)
 	 * and if the disks are all static the game is over (user lost).
-	 *
+	 * Also if the timeRemaining drops below the zero the game is over (user lost).
+	 * The number of wins and losses is also calculated here
 	 */
 	public void updateGame(long now) {
+		if (levelOver) return; // don't do anything when the game is not being played ...
+		
 		currTime = now;
 		if (firstEval){
 			dt=0;
