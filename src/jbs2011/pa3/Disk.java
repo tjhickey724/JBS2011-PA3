@@ -44,8 +44,8 @@ public class Disk {
 		this.r = r;
 		this.vx = 0;
 		this.vy = 0;
-		if (this.y < r)
-			this.y = r;
+		//if (this.y < r)
+		//	this.y = r;
 		this.isStatic = false;
 	}
 	/**
@@ -98,7 +98,7 @@ public class Disk {
 	 */
 	public void update(long dt) {
 		float localGravity = weightless?0:gravity;
-		vy += (dt / 1000.0) * localGravity;
+		vy += (dt / 1000.0) * gravity;  //localGravity;
 		x += vx * (dt / 1000.0);
 		y += vy * (dt / 1000.0);
 

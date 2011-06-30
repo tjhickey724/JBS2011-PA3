@@ -18,13 +18,7 @@ public class GameModel  {
 	 * list of all active disks in the game
 	 */
 	public ArrayList<Disk> disks = new ArrayList<Disk>();
-	/**
-	 * list of all static squares
-	 */
 	public ArrayList<Square> squares=new ArrayList<Square>();
-	/**
-	 * list of all target squares
-	 */
 	public ArrayList<Square> targets=new ArrayList<Square>();
 	
 	// last time the doDraw method was called
@@ -38,6 +32,20 @@ public class GameModel  {
 	 * length of a game in seconds
 	 */
 	public float gameLength=15; // seconds
+	/** offset of the background */
+	public float backgroundOffset = 0;
+	
+	/**
+	 * size of the model coordinate system
+	 */
+	public float modelWidth = 1000;
+	public float modelHeight = 400;
+	public float backgroundWidth=320*2;  // hard-coded ... ugly....
+	public float backgroundHeight=213*2;
+	/** 
+	 * speed of the objects
+	 */
+	public float backgroundSpeed = 200; //pixels per second
 	/**
 	 * time remaining in the current game
 	 */
@@ -241,6 +249,10 @@ public class GameModel  {
 			return;
 		}
 			
+		//move the background
+		backgroundOffset -= backgroundSpeed*dt/1000;
+		if (backgroundOffset+backgroundWidth <=0)
+			backgroundOffset = 0; 
 		
 		// the non-static disks will have their positions updated
 		// so we first find the arraylist of non-static disks
@@ -265,24 +277,34 @@ public class GameModel  {
 		for (Disk d:activeDisks){
 				// let gravity move the object over the time interval dt
 				d.update(dt);
+				if ((d.y>modelHeight) ) {d.vy = -Math.abs(d.vy);};
 				
-				// check to see if the disk has hit any squares, if so it become static
-				for (Square s:squares) 
-					if (d.intersects(s)) 
-						d.isStatic=true;
+				// check to see if the disk has hit any squares, if so it changes direction
+				for (Square s:squares) {
+					s.update(dt);
+					if (s.x+s.w<0) s.x += modelWidth;
+					if (d.intersects(s)) {
+						d.vx *= -1;
+						d.vy *= -1;
+					}
+				}
 				
 				// check to see if the disk has hit any static disks, and make it static if it has
 				for (Disk d1:disks) 
 					if (d.intersects(d1) && d1.isStatic)
 						d.isStatic = true;	
 				
-				// check to see if the disk has hit any targets, and if so the level is over..
+				// check to see if the disk has hit any targets, and if so add some time!..
 
-				for (Square s:targets)
+				for (Square s:targets){
+					s.update(dt);
+					if (s.x+s.w<0) s.x += modelWidth;
 					if (d.intersects(s)){
 						hitTarget.add(s);
-						hitDisk.add(d); 
+						startTime += 5000;
+						//hitDisk.add(d); 
 					}
+				}
 					
 		}
 		for (Disk d:hitDisk){
@@ -324,6 +346,8 @@ public class GameModel  {
 	}
 	
 	public void createLevel(int level, int width, int height){
+		this.modelWidth=width;
+		this.modelHeight=height;
 		startTime = System.currentTimeMillis();
 		timeRemaining = gameLength;
 		switch (level){
@@ -340,46 +364,18 @@ public class GameModel  {
 			
 		
 		case 2: // this is a fun level with up to 30 visible blocks, 10 targets and 1 disks..
-			for (int i=0;i<10; i++){
-				this.addSquare((float)Math.random()*width,(float)Math.random()*(height-100)+100,(float)Math.random()*30+40);
+			for (int i=0;i<4; i++){
+				this.addSquare((float)Math.random()*width,(float)Math.random()*(height-10)+10,(float)Math.random()*30+40);
 			}
 			
-			for (int i=0; i<10; i++)
-				this.addTarget((float)Math.random()*(width-200)+100,(float)Math.random()*(height-100)+100,50);
+			for (int i=0; i<4; i++)
+				this.addTarget((float)Math.random()*(width-200)+100,(float)Math.random()*(height-10)+10,50);
 
-			for (int i=0;i<2;i++)
-				this.addDisk(50f*i,50f,25f);
+			for (int i=0;i<1;i++)
+				this.addDisk(50f*i+200,3f,30f);
 
 			break;
 	  }
-	}
-	/**
-	 * do a little testing of the model...
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println("staring the test method\n");
-		GameModel g = new GameModel();
-		g.addSquare(0f,1f,2f);
-		g.addTarget(0f,3f,2f);
-		Disk d = g.addDisk(0f,10f,1f);
-		d.vx=1; d.vy=20;
-		g.toString();
-		for(int i=0; i<200; i++) {
-			System.out.println("Level "+i);
-			g.updateGame(100L*i);
-			System.out.println(g.toString());
-		}
-		try {
-			java.lang.Thread.sleep(100L);
-		}
-		catch (Exception e){
-			System.out.println("Exception: "+e);
-		}
-		
-		
-		System.out.println("completing the method");
 	}
 	
 	

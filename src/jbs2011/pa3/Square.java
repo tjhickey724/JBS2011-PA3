@@ -6,12 +6,13 @@ public class Square {
 	 * and its width w
 	 */
 	public float x,y,w;
+	public float speed =100+(int)(50*Math.random()); // default speed in pixels/second
 	
 	
 	/**
 	 * this is true if the Square is a target of the game
 	 */
-	public boolean isTarget;
+	public boolean isTarget=false;
 	
 	
 	/**
@@ -44,6 +45,13 @@ public class Square {
 	 */
 	public void move(float x, float y){
 		this.x = x; this.y =y;
+	}
+	
+	/**
+	 * update moves the object at a given speed from right to left
+	 */
+	public void update(long dt){
+		this.x -= this.speed*dt/1000;
 	}
 
 	/**
