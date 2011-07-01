@@ -34,6 +34,7 @@ public class GameModel  {
 	public float gameLength=15; // seconds
 	/** offset of the background */
 	public float backgroundOffset = 0;
+	public float backgroundOffset2 = 0;
 	
 	/**
 	 * size of the model coordinate system
@@ -45,7 +46,7 @@ public class GameModel  {
 	/** 
 	 * speed of the objects
 	 */
-	public float backgroundSpeed = 200; //pixels per second
+	public float backgroundSpeed = 100; //pixels per second
 	/**
 	 * time remaining in the current game
 	 */
@@ -250,9 +251,12 @@ public class GameModel  {
 		}
 			
 		//move the background
-		backgroundOffset -= backgroundSpeed*dt/1000;
+		backgroundOffset -= backgroundSpeed*dt/2000;
+		backgroundOffset2 -= backgroundSpeed*dt/1000;
 		if (backgroundOffset+backgroundWidth <=0)
 			backgroundOffset = 0; 
+		if (backgroundOffset2+backgroundWidth <=0)
+			backgroundOffset2 = 0; 
 		
 		// the non-static disks will have their positions updated
 		// so we first find the arraylist of non-static disks
@@ -348,6 +352,8 @@ public class GameModel  {
 	public void createLevel(int level, int width, int height){
 		this.modelWidth=width;
 		this.modelHeight=height;
+		this.backgroundWidth=width;
+		this.backgroundHeight=height;
 		startTime = System.currentTimeMillis();
 		timeRemaining = gameLength;
 		switch (level){

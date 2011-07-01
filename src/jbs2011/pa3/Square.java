@@ -6,7 +6,7 @@ public class Square {
 	 * and its width w
 	 */
 	public float x,y,w;
-	public float speed =100+(int)(50*Math.random()); // default speed in pixels/second
+	public float speed =100; //+(int)(50*Math.random()); // default speed in pixels/second
 	
 	
 	/**
@@ -51,7 +51,7 @@ public class Square {
 	 * update moves the object at a given speed from right to left
 	 */
 	public void update(long dt){
-		this.x -= this.speed*dt/1000;
+		this.x -= (this.speed+this.y/2)*dt/1000;
 	}
 
 	/**
