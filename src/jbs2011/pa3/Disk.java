@@ -54,6 +54,7 @@ public class Disk {
 	 * @param y
 	 * @return true if point inside disk
 	 */
+	@Deprecated
 	public boolean inside(float x, float y){
 		float dist2 = (x-this.x)*(x-this.x) + (y-this.y)*(y-this.y);
 		boolean z = (dist2 < this.r*this.r);  
